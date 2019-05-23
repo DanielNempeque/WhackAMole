@@ -5,14 +5,17 @@ const int bmole_2 = 23;
 const int bmole_3 = 24;
 const int bmole_4 = 25;
 const int bmole_5 = 26;
+const int bmole_6 = 27;
 
 
-const int onTime = 600;
+const int onTime = 1000;
+
 const int mole_1 = 2;
 const int mole_2 = 3;
 const int mole_3 = 4;
 const int mole_4 = 5;
 const int mole_5 = 6;
+const int mole_6 = 7;
 
 
 int dif = 10;
@@ -22,11 +25,12 @@ int stateAbility = 0;
 int stateTime = 0;
 int score = 0;
 
-int val = 100 * random(10, dif*10);
-int val2 = 100 * random(10, dif*10);
-int val3 = 100 * random(10, dif*10);
-int val4 = 100 * random(10, dif*10);
-int val5 = 100 * random(10, dif*10);
+int val;
+int val2;
+int val3;
+int val4;
+int val5;
+int val6;
 
 
 
@@ -40,6 +44,7 @@ boolean point_mole2 = false;
 boolean point_mole3 = false;
 boolean point_mole4 = false;
 boolean point_mole5 = false;
+boolean point_mole6 = false;
 
 unsigned long timeStart = 0;
 
@@ -53,10 +58,13 @@ unsigned long t0mole_4 = 0;
 unsigned long t0mole4_last = 0;
 unsigned long t0mole_5 = 0;
 unsigned long t0mole5_last = 0;
+unsigned long t0mole_6 = 0;
+unsigned long t0mole6_last = 0;
 
 void setup() {
-  randomSeed(analogRead(A15));
   Serial.begin(9600);
+  pinMode(A15, INPUT);
+  randomSeed(analogRead(A15));
   pinMode(bab, INPUT);
   pinMode(btime, INPUT);
   pinMode(bmole_1, INPUT);
@@ -69,6 +77,15 @@ void setup() {
   pinMode(mole_4, OUTPUT);
   pinMode(bmole_5, INPUT);
   pinMode(mole_5, OUTPUT);
+  pinMode(bmole_6, INPUT);
+  pinMode(mole_6, OUTPUT);
+
+  val = 102 * random(10, dif * 10);
+  val2 = 105 * random(10, dif * 10);
+  val3 = 120 * random(10, dif * 10);
+  val4 = 140 * random(10, dif * 10);
+  val5 = 104 * random(10, dif * 10);
+  val6 = 113 * random(10, dif * 10);
 }
 
 void loop() {
@@ -86,6 +103,7 @@ void game() {
   mole3();
   mole4();
   mole5();
+  mole6();
   if (dif_t0 - dif_t0_last >= 10000) {
     if (dif > 2) {
       dif = dif - 1;
@@ -98,10 +116,10 @@ void mole1() {
   if (t0mole_1 - t0mole1_last >= val) {
     if (digitalRead(mole_1) == HIGH) {
       digitalWrite(mole_1 , LOW);
-      val = (100 * random(10, dif*10));
+      val = (100 * random(10, dif * 10));
       mole_counter = mole_counter - 1;
       point_mole1 = false;
-    } else {
+    } else if(digitalRead(mole_1) == LOW){
       digitalWrite(mole_1 , HIGH);
       mole_counter = mole_counter + 1;
       val = onTime;
@@ -115,95 +133,135 @@ void mole1() {
     Serial.print("Tu puntaje es: ");
     Serial.println(score);
   }
-}
-void mole2(){
-  t0mole_2 = millis();
-    if (t0mole_2 - t0mole2_last >= val2) {
-      if (digitalRead(mole_2) == HIGH) {
-        digitalWrite(mole_2 , LOW);
-        val2 = (100 * random(10, dif*10));
-        mole_counter = mole_counter - 1;
-        point_mole2 = false;
-      } else {
-        digitalWrite(mole_2 , HIGH);
-        mole_counter = mole_counter + 1;
-        val2 = onTime;
-      }
-      t0mole2_last = millis();
-    }
-    if (digitalRead(bmole_2) && digitalRead(mole_2) && !point_mole2) {
-      point_mole2 = true;
-      score = score + 1;
-      Serial.print("Tu puntaje es: ");
-      Serial.println(score);
-    }
-}
-void mole3(){
-  t0mole_3 = millis();
-    if (t0mole_3 - t0mole3_last >= val3) {
-      if (digitalRead(mole_3) == HIGH) {
-        digitalWrite(mole_3 , LOW);
-        val3 = (100 * random(10, dif*10));
-        mole_counter = mole_counter - 1;
-        point_mole3 = false;
-      } else {
-        digitalWrite(mole_3 , HIGH);
-        mole_counter = mole_counter + 1;
-        val3 = onTime;
-      }
-      t0mole3_last = millis();
-    }
-    if (digitalRead(bmole_3) && digitalRead(mole_3) && !point_mole3) {
-      point_mole3 = true;
-      score = score + 1;
-      Serial.print("Tu puntaje es: ");
-      Serial.println(score);
-    }
-}
-void mole4() {
-  t0mole_4 = millis();
-  if (t0mole_4 - t0mole1_last >= val4) {
-    if (digitalRead(mole_4) == HIGH) {
-      digitalWrite(mole_4 , LOW);
-      val4 = (100 * random(10, dif*10));
-      mole_counter = mole_counter - 1;
-      point_mole1 = false;
-    } else {
-      digitalWrite(mole_4 , HIGH);
-      mole_counter = mole_counter + 1;
-      val4 = 1000;
-    }
-
-    t0mole1_last = millis();
+  if (gameMode == 0 && digitalRead(bmole_1) && !digitalRead(mole_1) && !point_mole1) {
+    stateTime = 2;
   }
-  if (digitalRead(bmole_4) && digitalRead(mole_4) && !point_mole1) {
-    point_mole1 = true;
+}
+void mole2() {
+  t0mole_2 = millis();
+  if (t0mole_2 - t0mole2_last >= val2) {
+    if (digitalRead(mole_2) == HIGH) {
+      digitalWrite(mole_2 , LOW);
+      val2 = (100 * random(10, dif * 10));
+      mole_counter = mole_counter - 1;
+      point_mole2 = false;
+    } else if(digitalRead(mole_2) == LOW){
+      digitalWrite(mole_2 , HIGH);
+      mole_counter = mole_counter + 1;
+      val2 = onTime;
+    }
+    t0mole2_last = millis();
+  }
+  if (digitalRead(bmole_2) && digitalRead(mole_2) && !point_mole2) {
+    point_mole2 = true;
     score = score + 1;
     Serial.print("Tu puntaje es: ");
     Serial.println(score);
+  }
+  if (gameMode == 0 && digitalRead(bmole_2) && !digitalRead(mole_2) && !point_mole2) {
+    stateTime = 2;
+  }
+}
+void mole3() {
+  t0mole_3 = millis();
+  if (t0mole_3 - t0mole3_last >= val3) {
+    if (digitalRead(mole_3) == HIGH) {
+      digitalWrite(mole_3 , LOW);
+      val3 = (100 * random(10, dif * 10));
+      mole_counter = mole_counter - 1;
+      point_mole3 = false;
+    } else if(digitalRead(mole_3) == LOW){
+      digitalWrite(mole_3 , HIGH);
+      mole_counter = mole_counter + 1;
+      val3 = onTime;
+    }
+    t0mole3_last = millis();
+  }
+  if (digitalRead(bmole_3) && digitalRead(mole_3) && !point_mole3) {
+    point_mole3 = true;
+    score = score + 1;
+    Serial.print("Tu puntaje es: ");
+    Serial.println(score);
+  }
+  if (gameMode == 0 && digitalRead(bmole_3) && !digitalRead(mole_3) && !point_mole3) {
+    stateTime = 2;
+  }
+}
+void mole4() {
+  t0mole_4 = millis();
+  if (t0mole_4 - t0mole4_last >= val4) {
+    if (digitalRead(mole_4) == HIGH) {
+      digitalWrite(mole_4 , LOW);
+      val4 = (100 * random(10, dif * 10));
+      mole_counter = mole_counter - 1;
+      point_mole4 = false;
+    } else if(digitalRead(mole_4) == LOW){
+      digitalWrite(mole_4 , HIGH);
+      mole_counter = mole_counter + 1;
+      val4 = onTime;
+    }
+    t0mole4_last = millis();
+  }
+  if (digitalRead(bmole_4) && digitalRead(mole_4) && !point_mole4) {
+    point_mole4 = true;
+    score = score + 1;
+    Serial.print("Tu puntaje es: ");
+    Serial.println(score);
+  }
+  if (gameMode == 0 && digitalRead(bmole_4) && !digitalRead(mole_4) && !point_mole4) {
+    stateTime = 2;
   }
 }
 void mole5() {
   t0mole_5 = millis();
-  if (t0mole_5 - t0mole1_last >= val5) {
+  if (t0mole_5 - t0mole5_last >= val5) {
     if (digitalRead(mole_5) == HIGH) {
       digitalWrite(mole_5 , LOW);
-      val5 = (100 * random(10, dif*10));
+      val5 = (100 * random(10, dif * 10));
       mole_counter = mole_counter - 1;
-      point_mole1 = false;
-    } else {
+      point_mole5 = false;
+    } else if(digitalRead(mole_5) == LOW){
       digitalWrite(mole_5 , HIGH);
       mole_counter = mole_counter + 1;
-      val5 = 1000;
+      val5 = onTime;
     }
 
-    t0mole1_last = millis();
+    t0mole5_last = millis();
   }
-  if (digitalRead(bmole_5) && digitalRead(mole_5) && !point_mole1) {
-    point_mole1 = true;
+  if (digitalRead(bmole_5) && digitalRead(mole_5) && !point_mole5) {
+    point_mole5 = true;
     score = score + 1;
     Serial.print("Tu puntaje es: ");
     Serial.println(score);
+  }
+  if (gameMode == 0 && digitalRead(bmole_5) && !digitalRead(mole_5) && !point_mole5) {
+    stateTime = 2;
+  }
+}
+void mole6() {
+  t0mole_6 = millis();
+  if (t0mole_6 - t0mole6_last >= val6) {
+    if (digitalRead(mole_6) == HIGH) {
+      digitalWrite(mole_6 , LOW);
+      val6 = (100 * random(10, dif * 10));
+      mole_counter = mole_counter - 1;
+      point_mole6 = false;
+    } else if(digitalRead(mole_6) == LOW){
+      digitalWrite(mole_6 , HIGH);
+      mole_counter = mole_counter + 1;
+      val6 = onTime;
+    }
+
+    t0mole6_last = millis();
+  }
+  if (digitalRead(bmole_6) && digitalRead(mole_6) && !point_mole6) {
+    point_mole6 = true;
+    score = score + 1;
+    Serial.print("Tu puntaje es: ");
+    Serial.println(score);
+  }
+  if (gameMode == 0 && digitalRead(bmole_6) && !digitalRead(mole_6) && !point_mole6) {
+    stateTime = 2;
   }
 }
 void abilityMode() {
@@ -214,10 +272,22 @@ void abilityMode() {
       inGame = true;
       Serial.print("Inicia habilidad");
       timeStart = millis();
+      randomi();
       break;
     case 1:
+      game();
       break;
     case 2:
+      gameMode = 3;
+      stateTime = 0;
+      off();
+      inGame = false;
+      dif = 10;
+      Serial.println("Game Over");
+      Serial.print("Score:");
+      Serial.print(score);
+      score = 0;
+      randomi();
       break;
   }
 }
@@ -230,22 +300,44 @@ void timeMode() {
         inGame = true;
         Serial.print("Inicia tiempo");
         timeStart = millis();
+        randomi();
         break;
       case 1:
         game();
-        break;
-      case 2:
         break;
     }
   } else {
     gameMode = 3;
     stateTime = 0;
+    off();
+    inGame = false;
+    dif = 10;
     Serial.println("Game Over");
     Serial.print("Score:");
     Serial.print(score);
+    score = 0;
+    randomi();
   }
 }
-
+void randomi() {
+  val = 102 * random(10, dif * 10);
+  val2 = 105 * random(10, dif * 10);
+  val3 = 120 * random(10, dif * 10);
+  val4 = 140 * random(10, dif * 10);
+  val5 = 104 * random(10, dif * 10);
+  val6 = 113 * random(10, dif * 10);
+}
+void off() {
+  digitalWrite(mole_1, LOW);
+  digitalWrite(mole_2, LOW);
+  digitalWrite(mole_3, LOW);
+  digitalWrite(mole_4, LOW);
+  digitalWrite(mole_5, LOW);
+  digitalWrite(mole_6, LOW);
+  digitalWrite(mole_1, LOW);
+  digitalWrite(mole_1, LOW);
+  digitalWrite(mole_1, LOW);
+}
 void checkBtn() {
   if (digitalRead(bab) && !inGame) {
     gameMode = 0;
