@@ -5,7 +5,7 @@ PImage fondo;
 Topo topo1, topo2, topo3, topo4, topo5, topo6, topo7, topo8, topo9;
 int x, y;
 void setup() {
-  port= new Serial(this, "COM4", 9600);
+  port= new Serial(this, "COM12", 9600);
   size(640, 360, P3D);
   x=(width/2)-30;
   y=150;
@@ -31,39 +31,39 @@ void draw() {
     String input=port.readString();
     if (input.equals("mole1H")) {
       topo1.setState(true);
-    } else if (input.equals("mole1L")) {
+    } else if (input.equals("1L")) {
       topo1.setState(false);
-    } else if (input.equals("mole2H")) {
+    } else if (input.equals("2H")) {
       topo2.setState(true);
-    } else if (input.equals("mole2L")) {
+    } else if (input.equals("2L")) {
       topo2.setState(false);
-    } else if (input.equals("mole3H")) {
+    } else if (input.equals("3H")) {
       topo3.setState(true);
-    } else if (input.equals("mole3L")) {
+    } else if (input.equals("3L")) {
       topo3.setState(false);
-    } else if (input.equals("mole4H")) {
+    } else if (input.equals("4H")) {
       topo4.setState(true);
-    } else if (input.equals("mole4L")) {
+    } else if (input.equals("4L")) {
       topo4.setState(false);
-    } else if (input.equals("mole5H")) {
+    } else if (input.equals("5H")) {
       topo5.setState(true);
-    } else if (input.equals("mole5L")) {
+    } else if (input.equals("5L")) {
       topo5.setState(false);
-    } else if (input.equals("mole6H")) {
+    } else if (input.equals("6H")) {
       topo6.setState(true);
-    } else if (input.equals("mole6L")) {
+    } else if (input.equals("6L")) {
       topo6.setState(false);
-    } else if (input.equals("mole7H")) {
+    } else if (input.equals("7H")) {
       topo7.setState(true);
-    } else if (input.equals("mole7L")) {
+    } else if (input.equals("7L")) {
       topo7.setState(false);
-    } else if (input.equals("mole8H")) {
+    } else if (input.equals("8H")) {
       topo8.setState(true);
-    } else if (input.equals("mole8L")) {
+    } else if (input.equals("8L")) {
       topo8.setState(false);
-    } else if (input.equals("mole9H")) {
+    } else if (input.equals("9H")) {
       topo9.setState(true);
-    } else if (input.equals("mole9L")) {
+    } else if (input.equals("9L")) {
       topo9.setState(false);
     }
   }
