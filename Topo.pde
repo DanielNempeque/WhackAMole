@@ -2,7 +2,8 @@ public class Topo {
   int x;
   int y;
   PImage mole, hole, hel;
-  boolean isOutside=false;
+  boolean isOutside = false;
+
   Topo(int x, int y) {
     this.x = x;
     this.y = y;

@@ -5,7 +5,7 @@ PImage fondo;
 Topo topo1, topo2, topo3, topo4, topo5, topo6, topo7, topo8, topo9;
 int x, y;
 void setup() {
-  port= new Serial(this, "COM4", 9600);
+  port= new Serial(this, "COM12", 9600);
   size(640, 360, P3D);
   x=(width/2)-30;
   y=150;
@@ -20,7 +20,7 @@ void setup() {
   topo7= new Topo(x+100, y+140);
   topo8= new Topo(x-200, y+140);
   topo9= new Topo(x+200, y+140);
-
+  
   noStroke();
 }
 
@@ -78,4 +78,12 @@ void displayInit() {
   topo7.displayMole();
   topo8.displayMole();
   topo9.displayMole();
+  if (port.available()>0) {
+    String input=port.readString();
+    if (input.equals("mole1H")) {
+      topo1.setState(true);
+    } else if (input.equals("mole1L")) {
+      topo1.setState(false);
+    }
+  }
 }
