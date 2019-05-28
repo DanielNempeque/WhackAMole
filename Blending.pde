@@ -1,18 +1,19 @@
-import processing.serial.*;
-Serial port;
-String score="Score: 0";
-PImage fondo;
+import processing.serial.*;//Import Serial Library
+Serial port;//Asing a name to the port7
+String score="Score: 0";//Start the score of the game
+PImage fondo;//Variable refered to the background
 
-Topo topo1, topo2, topo3, topo4, topo5, topo6, topo7, topo8, topo9;
-int linefeed = 10;
-int x, y;
+Topo topo1, topo2, topo3, topo4, topo5, topo6, topo7, topo8, topo9;//Define all of the moles in the game
+int linefeed = 10;//Detect the line change
+int x, y;//Put the variables of distribution of the moles
 void setup() {
-  port= new Serial(this, "COM12", 9600);
-  port.bufferUntil(linefeed);
-  size(640, 360, P3D);
-  x=(width/2)-30;
-  y=150;
-  fondo = loadImage("fondo.jpg");
+  port= new Serial(this, "COM12", 9600);//Initialize the port
+  port.bufferUntil(linefeed);//Read the entry of the console untill it encounters a line break
+  size(640, 360, P3D);//Define the size of the screen
+  x=(width/2)-30;//Asing a value to the variable x
+  y=150;//Asing a value to the variable y
+  fondo = loadImage("fondo.jpg");//Asing the image to the background
+  //Create all moles
   topo1= new Topo(x, y);
   topo2= new Topo(x-100, y+70);
   topo3= new Topo(x, y+70);
@@ -22,35 +23,24 @@ void setup() {
   topo7= new Topo(x+100, y+140);
   topo8= new Topo(x-200, y+140);
   topo9= new Topo(x+200, y+140);
+  //Define the text size
   textSize(32);
+  //Disables drawing the stroke
   noStroke();
 }
 
 void draw() {
+  //Draw the background
   background(fondo);
   displayInit();
-  if (port.available()>0) {
-  }
 }
 void serialEvent(Serial port) {
+  //Read the input
   String input = port.readString();
-  
+  //Clean the input
   input = trim(input);
-  //switch(input) {
-  //case "1L":
-  //  print("Topo 1 abajo");
-  //  break;
-  //case "1H":
-  //  print("Topo 1 arriba");
-  //  break;
-  //case "2L":
-  //  print("Topo 2 abajo");
-  //  break;
-  //case "2H":
-  //  print("Topo 2 arriba");
-  //  break;
-  //}
-  
+
+//Compare the string to sohw the state of the mole
   if (input.equals("1H")) {
     topo1.setState(true);
   } else if (input.equals("1L")) {
@@ -88,14 +78,17 @@ void serialEvent(Serial port) {
   } else if (input.equals("9L")) {
     topo9.setState(false);
   }
-  
+  //Put the string score in the screen
   if(input.contains("Score:")){
     score = input;
   }
+  //Restore the default value of the score
   if(input.contains("Game")){
     score = "Score: 0";
   }
 }
+
+//Draw the moles 
 void displayInit() {
   text(score, width/2-60, 30);
   topo1.displayMole();
