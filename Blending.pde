@@ -1,4 +1,8 @@
 import processing.serial.*;//Import Serial Library
+import processing.sound.*;//Import Sound Library
+
+SoundFile file;
+SoundFile fail;
 Serial port;//Asing a name to the port7
 String score="Score: 0";//Start the score of the game
 PImage fondo;//Variable refered to the background
@@ -6,7 +10,9 @@ PImage fondo;//Variable refered to the background
 Topo topo1, topo2, topo3, topo4, topo5, topo6, topo7, topo8, topo9;//Define all of the moles in the game
 int linefeed = 10;//Detect the line change
 int x, y;//Put the variables of distribution of the moles
+
 void setup() {
+  
   port= new Serial(this, "COM12", 9600);//Initialize the port
   port.bufferUntil(linefeed);//Read the entry of the console untill it encounters a line break
   size(640, 360, P3D);//Define the size of the screen
@@ -14,6 +20,9 @@ void setup() {
   y=150;//Asing a value to the variable y
   fondo = loadImage("fondo.jpg");//Asing the image to the background
   //Create all moles
+  file = new SoundFile(this,"Music.mp3");
+  file.loop();
+  fail = new SoundFile(this,"Fail.mp3");
   topo1= new Topo(x, y);
   topo2= new Topo(x-100, y+70);
   topo3= new Topo(x, y+70);
@@ -27,6 +36,7 @@ void setup() {
   textSize(32);
   //Disables drawing the stroke
   noStroke();
+  
 }
 
 void draw() {
@@ -85,6 +95,11 @@ void serialEvent(Serial port) {
   //Restore the default value of the score
   if(input.contains("Game")){
     score = "Score: 0";
+    file.pause();
+    fail.play();
+    text("GAME OVER",width/2-60, height/2-20);
+    delay(4000);
+    file.play();
   }
 }
 
