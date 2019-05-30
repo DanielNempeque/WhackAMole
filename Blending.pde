@@ -21,16 +21,16 @@ void setup() {
   fondo = loadImage("fondo.jpg");//Asing the image to the background
   //Create all moles
   file = new SoundFile(this,"Music.mp3");
-  file.loop();
+  file.play();
   fail = new SoundFile(this,"Fail.mp3");
   topo1= new Topo(x, y);
   topo2= new Topo(x-100, y+70);
   topo3= new Topo(x, y+70);
   topo4= new Topo(x+100, y+70);
-  topo5= new Topo(x-100, y+140);
-  topo6= new Topo(x, y+140);
-  topo7= new Topo(x+100, y+140);
-  topo8= new Topo(x-200, y+140);
+  topo5= new Topo(x-200, y+140);
+  topo6= new Topo(x-100, y+140);
+  topo7= new Topo(x, y+140);
+  topo8= new Topo(x+100, y+140);
   topo9= new Topo(x+200, y+140);
   //Define the text size
   textSize(32);
